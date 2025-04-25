@@ -1,0 +1,139 @@
+{
+    "run": {
+        "task": "moment_retrieval",
+        "lr_sched": "linear_warmup_cosine_lr",
+        "init_lr": 0.0003,
+        "min_lr": 0,
+        "warmup_lr": 1e-08,
+        "warmup_steps": 600,
+        "weight_decay": 0.05,
+        "max_epoch": 10,
+        "batch_size_train": 1,
+        "batch_size_eval": 1,
+        "num_workers": 2,
+        "accum_grad_iters": 8,
+        "max_len": 200,
+        "min_len": 8,
+        "num_beams": 5,
+        "seed": 42,
+        "output_dir": "result/mr_BLIP/QVH/QVH-6",
+        "amp": true,
+        "resume_ckpt_path": null,
+        "evaluate": false,
+        "train_splits": [
+            "train"
+        ],
+        "valid_splits": [
+            "val"
+        ],
+        "test_splits": [
+            "test"
+        ],
+        "device": "cuda",
+        "world_size": 2,
+        "dist_url": "env://",
+        "distributed": true,
+        "find_unused_parameters": true,
+        "wandb": true,
+        "wandb_project": "mr_BLIP",
+        "wandb_name": "QVH",
+        "rank": 0,
+        "gpu": 0,
+        "dist_backend": "nccl"
+    },
+    "model": {
+        "arch": "blip2_mr",
+        "load_finetuned": false,
+        "pretrained": "https://storage.googleapis.com/sfr-vision-language-research/LAVIS/models/BLIP2/blip2_pretrained_flant5xl.pth",
+        "finetuned": "",
+        "image_size": 224,
+        "drop_path_rate": 0,
+        "use_grad_checkpoint": false,
+        "vit_precision": "fp16",
+        "freeze_vit": true,
+        "num_query_token": 32,
+        "t5_model": "google/flan-t5-xl",
+        "prompt": "",
+        "model_type": "pretrain_flant5xl",
+        "task": "qformer_freeze_lora",
+        "input_time_format": "seconds_integers",
+        "interleave_data": true,
+        "frame_token_aggregation": false
+    },
+    "preprocess": {
+        "vis_processor": {
+            "train": {
+                "name": "blip_image_train",
+                "image_size": 224
+            },
+            "eval": {
+                "name": "blip_image_eval",
+                "image_size": 224
+            }
+        },
+        "text_processor": {
+            "train": {
+                "name": "blip_caption"
+            },
+            "eval": {
+                "name": "blip_caption"
+            }
+        }
+    },
+    "datasets": {
+        "qvh": {
+            "data_type": "videos",
+            "build_info": {
+                "annotations": {
+                    "train": {
+                        "url": "qvhighlights/lavis/train.json",
+                        "storage": "qvhighlights/lavis/train.json"
+                    },
+                    "val": {
+                        "url": "qvhighlights/lavis/val.json",
+                        "storage": "qvhighlights/lavis/val.json"
+                    },
+                    "test": {
+                        "url": "qvhighlights/lavis/val.json",
+                        "storage": "qvhighlights/lavis/val.json"
+                    }
+                },
+                "videos": {
+                    "storage": "qvhighlights/videos"
+                }
+            },
+            "vis_processor": {
+                "train": {
+                    "name": "blip2_video_train",
+                    "n_frms": 14,
+                    "image_size": 224
+                },
+                "eval": {
+                    "name": "blip_video_eval",
+                    "n_frms": 14,
+                    "image_size": 224
+                }
+            },
+            "text_processor": {
+                "train": {
+                    "name": "blip_question",
+                    "max_words": 50
+                },
+                "eval": {
+                    "name": "blip_question",
+                    "max_words": 50
+                }
+            }
+        }
+    }
+}
+{"train_lr": "0.000", "train_loss": "1.965"}
+{"val_agg_metrics": 5.2, "val_r1": {"0.5": 13.5, "0.55": 11.0, "0.6": 9.0, "0.65": 7.5, "0.7": 4.0, "0.75": 3.5, "0.8": 2.0, "0.85": 1.0, "0.9": 0.5, "0.95": 0.0}, "val_mAP": {"0.5": 10.78, "0.55": 8.93, "0.6": 7.68, "0.65": 6.18, "0.7": 3.6, "0.75": 3.1, "0.8": 2.0, "0.85": 1.0, "0.9": 0.5, "0.95": 0.0, "average": 4.38}, "val_mIoU": 0.22441653360583166, "val_invalid_predictions": 0.0, "val_total": 200, "val_best_epoch": 0}
+{"train_lr": "0.000", "train_loss": "0.984"}
+{"val_agg_metrics": 25.45, "val_r1": {"0.5": 54.5, "0.55": 47.0, "0.6": 40.0, "0.65": 34.0, "0.7": 26.5, "0.75": 21.0, "0.8": 15.0, "0.85": 8.5, "0.9": 5.0, "0.95": 3.0}, "val_mAP": {"0.5": 45.72, "0.55": 39.73, "0.6": 33.6, "0.65": 28.1, "0.7": 22.18, "0.75": 17.77, "0.8": 12.52, "0.85": 7.1, "0.9": 4.5, "0.95": 3.0, "average": 21.42}, "val_mIoU": 0.4887438650748925, "val_invalid_predictions": 0.0, "val_total": 200, "val_best_epoch": 1}
+{"train_lr": "0.000", "train_loss": "0.881"}
+{"val_agg_metrics": 26.1, "val_r1": {"0.5": 50.5, "0.55": 43.5, "0.6": 38.5, "0.65": 32.0, "0.7": 27.0, "0.75": 23.0, "0.8": 18.5, "0.85": 13.5, "0.9": 8.5, "0.95": 6.0}, "val_mAP": {"0.5": 43.6, "0.55": 37.52, "0.6": 33.02, "0.65": 27.77, "0.7": 23.85, "0.75": 20.43, "0.8": 16.93, "0.85": 12.85, "0.9": 8.25, "0.95": 5.75, "average": 23.0}, "val_mIoU": 0.4828336736211446, "val_invalid_predictions": 0.0, "val_total": 200, "val_best_epoch": 2}
+{"train_lr": "0.000", "train_loss": "0.842"}
+{"val_agg_metrics": 30.8, "val_r1": {"0.5": 60.5, "0.55": 49.0, "0.6": 45.5, "0.65": 38.5, "0.7": 32.5, "0.75": 27.5, "0.8": 21.5, "0.85": 15.5, "0.9": 11.5, "0.95": 6.0}, "val_mAP": {"0.5": 51.73, "0.55": 41.68, "0.6": 39.02, "0.65": 33.52, "0.7": 28.02, "0.75": 24.25, "0.8": 19.67, "0.85": 14.5, "0.9": 10.75, "0.95": 5.75, "average": 26.89}, "val_mIoU": 0.5302384102161639, "val_invalid_predictions": 0.005, "val_total": 200, "val_best_epoch": 3}
+{"train_lr": "0.000", "train_loss": "0.815"}
+{"val_agg_metrics": 32.95, "val_r1": {"0.5": 61.5, "0.55": 54.5, "0.6": 48.0, "0.65": 40.5, "0.7": 37.0, "0.75": 31.5, "0.8": 22.0, "0.85": 16.0, "0.9": 11.5, "0.95": 7.0}, "val_mAP": {"0.5": 53.1, "0.55": 46.68, "0.6": 41.08, "0.65": 34.58, "0.7": 31.58, "0.75": 27.42, "0.8": 19.5, "0.85": 14.5, "0.9": 10.5, "0.95": 6.25, "average": 28.52}, "val_mIoU": 0.5411054150580251, "val_invalid_predictions": 0.01, "val_total": 200, "val_best_epoch": 4}
